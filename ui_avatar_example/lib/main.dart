@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Ui Avatar Example',
+      title: 'Ui Avatar Playground',
       themeMode: ThemeMode.system,
       darkTheme: ThemeData.dark(),
       theme: ThemeData(

@@ -28,8 +28,7 @@ class UiAvatar extends StatelessWidget {
     this.useRandomColors = false,
     this.useNameAsSeed = true,
     this.border,
-    this.gradient,
-    this.useGradient = false,
+   
     this.boxShadow,
   }) : assert(size >= 16, "Size must be at least 16");
 
@@ -102,18 +101,7 @@ class UiAvatar extends StatelessWidget {
   /// defaults to null
   final BoxBorder? border;
 
-  /// A gradient to use for the background of the avatar
-  ///
-  /// defaults to null
-  ///
-  /// if [useRandomColors] is true, this gradient will be ignored
-  final Gradient? gradient;
-
-  /// Whether to use a gradient for the background of the avatar or not
-  ///
-  /// defaults to false
-  ///
-  final bool useGradient;
+  
 
   /// A box shadow to use for the avatar
   ///
@@ -137,19 +125,7 @@ class UiAvatar extends StatelessWidget {
         border: border,
         color: finalBgColor,
         shape: shape,
-        gradient:
-            useGradient
-                ? useRandomColors
-                    ? LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        finalBgColor.withAlpha((0.5 * 255).toInt()),
-                        finalBgColor,
-                      ],
-                    )
-                    : gradient
-                : null,
+        
         boxShadow: boxShadow,
       ),
       child: Center(

@@ -6,12 +6,11 @@ class SingleScreen extends StatefulWidget {
     super.key,
     required this.name,
     required this.isRandom,
-    required this.tag,
   });
 
   final String name;
   final bool isRandom;
-  final String tag;
+
 
   @override
   State<SingleScreen> createState() => _SingleScreenState();
@@ -126,7 +125,7 @@ class _SingleScreenState extends State<SingleScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Hero(tag: widget.tag, child: avatar),
+            avatar,
 
             const SizedBox(height: 24),
 
