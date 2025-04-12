@@ -22,7 +22,6 @@ class _HomeScreenState extends State<HomeScreen> {
           Tooltip(
             message: 'Use random colors',
             child: Switch.adaptive(
-              
               activeColor: Theme.of(context).colorScheme.primary,
               inactiveTrackColor: Theme.of(
                 context,
@@ -37,18 +36,38 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: ListView.separated(
-        itemCount: harryPotterNames.length,
-        itemBuilder: (context, index) {
-          final name = harryPotterNames[index];
-          return ListTile(
+      body: Column(
+        children: [
+          ListTile(
+            tileColor: Theme.of(context).colorScheme.tertiary.withOpacity(0.1),
             contentPadding: const EdgeInsets.all(8),
-            title: Text(name),
-            leading: UiAvatar(name: name, useRandomColors: isRandom),
-          );
-        },
-        separatorBuilder:
-            (context, index) => const Divider(height: 1, color: Colors.grey),
+            title: Text(
+              "Harkirat Singh",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            leading: UiAvatar(
+              useRandomColors: isRandom,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const Divider(height: 1, color: Colors.grey),
+          Expanded(
+            child: ListView.separated(
+              itemCount: harryPotterNames.length,
+              itemBuilder: (context, index) {
+                final name = harryPotterNames[index];
+                return ListTile(
+                  contentPadding: const EdgeInsets.all(8),
+                  title: Text(name),
+                  leading: UiAvatar(name: name, useRandomColors: isRandom),
+                );
+              },
+              separatorBuilder:
+                  (context, index) =>
+                      const Divider(height: 1, color: Colors.grey),
+            ),
+          ),
+        ],
       ),
     );
   }

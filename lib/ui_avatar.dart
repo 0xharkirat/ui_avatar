@@ -1,6 +1,10 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
+/// Name of the the last contributor will be used as default name
+/// as a token of appreciation.
+const _kDefaultName = "Harkirat Singh";
+
 /// A simple widget to display a circular avatar with initials.
 /// No need to use any API for this.
 class UiAvatar extends StatelessWidget {
@@ -9,11 +13,11 @@ class UiAvatar extends StatelessWidget {
   /// Examples:
   /// - "Harkirat Singh" -> "HS"
   /// - "Albus Dumbledore" -> "AD"
-  /// - "Aang" -> "AA"
+  /// - "Harry" -> "HA"
   /// - "A" -> "A"
   const UiAvatar({
     super.key,
-    this.name = "Harkirat Singh",
+    this.name = _kDefaultName,
     this.size = 64.0,
     this.bgColor = Colors.grey,
     this.textColor = Colors.black,
@@ -23,11 +27,15 @@ class UiAvatar extends StatelessWidget {
     this.fontFamily,
     this.useRandomColors = false,
     this.useNameAsSeed = true,
+    this.border,
+    this.gradient,
+    this.useGradient = false,
+    this.boxShadow,
   }) : assert(size >= 16, "Size must be at least 16");
 
   /// The name to display in the avatar
   ///
-  /// defaults to "Harkirat Singh" or "??" if empty
+  /// defaults to [_kDefaultName] or "??" if empty
   ///
   final String name;
 
@@ -89,6 +97,29 @@ class UiAvatar extends StatelessWidget {
   /// if false, random colors on every build.
   final bool useNameAsSeed;
 
+  /// Whether to use a border around the avatar or not
+  ///
+  /// defaults to null
+  final BoxBorder? border;
+
+  /// A gradient to use for the background of the avatar
+  ///
+  /// defaults to null
+  ///
+  /// if [useRandomColors] is true, this gradient will be ignored
+  final Gradient? gradient;
+
+  /// Whether to use a gradient for the background of the avatar or not
+  ///
+  /// defaults to false
+  ///
+  final bool useGradient;
+
+  /// A box shadow to use for the avatar
+  ///
+  /// defaults to null
+  final List<BoxShadow>? boxShadow;
+
   @override
   Widget build(BuildContext context) {
     final Color finalBgColor =
@@ -102,7 +133,25 @@ class UiAvatar extends StatelessWidget {
     return Container(
       width: size,
       height: size,
-      decoration: BoxDecoration(color: finalBgColor, shape: shape),
+      decoration: BoxDecoration(
+        border: border,
+        color: finalBgColor,
+        shape: shape,
+        gradient:
+            useGradient
+                ? useRandomColors
+                    ? LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        finalBgColor.withAlpha((0.5 * 255).toInt()),
+                        finalBgColor,
+                      ],
+                    )
+                    : gradient
+                : null,
+        boxShadow: boxShadow,
+      ),
       child: Center(
         child: Text(
           _getInitials(name),
