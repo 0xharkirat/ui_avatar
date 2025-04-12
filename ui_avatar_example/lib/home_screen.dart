@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ui_avatar_example/names.dart';
 import 'package:ui_avatar/ui_avatar.dart';
+import 'package:ui_avatar_example/single_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -39,15 +40,30 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         children: [
           ListTile(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder:
+                      (context) => SingleScreen(
+                        tag: 'Harkirat',
+                        name: "Harkirat Singh",
+                        isRandom: isRandom,
+                      ),
+                ),
+              );
+            },
             tileColor: Theme.of(context).colorScheme.tertiary.withOpacity(0.1),
             contentPadding: const EdgeInsets.all(8),
             title: Text(
               "Harkirat Singh",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            leading: UiAvatar(
-              useRandomColors: isRandom,
-              fontWeight: FontWeight.bold,
+            leading: Hero(
+              tag: 'Harkirat',
+              child: UiAvatar(
+                useRandomColors: isRandom,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           const Divider(height: 1, color: Colors.grey),
@@ -57,9 +73,19 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (context, index) {
                 final name = harryPotterNames[index];
                 return ListTile(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder:
+                            (context) =>
+                                SingleScreen(name: name, isRandom: isRandom, tag: name),
+                      ),
+                    );
+                  },
                   contentPadding: const EdgeInsets.all(8),
                   title: Text(name),
-                  leading: UiAvatar(name: name, useRandomColors: isRandom),
+                  leading: Hero(tag: name,
+                  child: UiAvatar(name: name, useRandomColors: isRandom)),
                 );
               },
               separatorBuilder:

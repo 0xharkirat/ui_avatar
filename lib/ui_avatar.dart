@@ -124,7 +124,7 @@ class UiAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     final Color finalBgColor =
         useRandomColors
-            ? (useNameAsSeed ? _getSeededColor(name) : _getRandomColor())
+            ? (useNameAsSeed ? _getSeededColor(name.trim()) : _getRandomColor())
             : bgColor;
 
     final Color finalTextColor =
