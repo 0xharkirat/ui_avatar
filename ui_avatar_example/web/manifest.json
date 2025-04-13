@@ -1,11 +1,11 @@
 {
-    "name": "ui_avatar_example",
+    "name": "ui_avatar_playground",
     "short_name": "ui_avatar_example",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "A playground for ui_avatar",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

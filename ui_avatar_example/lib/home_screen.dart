@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ui_avatar/ui_avatar.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, required this.onChangeThemeMode});
+  final void Function(ThemeMode) onChangeThemeMode;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String name = "Harkirat Singh";
+  String name = kDefaultName;
   double size = 64;
   BoxShape shape = BoxShape.circle;
   bool isUpperCase = true;
@@ -17,7 +19,6 @@ class _HomeScreenState extends State<HomeScreen> {
   bool useNameAsSeed = true;
   FontWeight fontWeight = FontWeight.normal;
   bool useBorder = false;
-
 
   Color bgColor = Colors.grey;
   Color textColor = Colors.black;
@@ -40,29 +41,58 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         title: const Text('Ui Avatar Playground'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        actions: [
+          // Themeode menu
+          PopupMenuButton<ThemeMode>(
+            icon: const Icon(Icons.color_lens),
+            onSelected: (mode) {
+              widget.onChangeThemeMode(mode);
+            },
+            itemBuilder:
+                (context) => [
+                  const PopupMenuItem(
+                    value: ThemeMode.system,
+                    child: Text('System'),
+                  ),
+                  const PopupMenuItem(
+                    value: ThemeMode.light,
+                    child: Text('Light'),
+                  ),
+                  const PopupMenuItem(
+                    value: ThemeMode.dark,
+                    child: Text('Dark'),
+                  ),
+                ],
+          ),
+        ],
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
-          final isWide = constraints.maxWidth > 700;
+          final isWide = constraints.maxWidth > 800;
           return Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
             child:
                 isWide
                     ? Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(child: _buildControls()),
-                        const SizedBox(width: 24),
-                        _buildPreview(),
+                        Expanded(
+                          child: SingleChildScrollView(child: _buildControls()),
+                        ),
+                        const SizedBox(width: 32),
+                        Expanded(child: _buildPreview()),
                       ],
                     )
                     : SingleChildScrollView(
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _buildPreview(),
-                          const SizedBox(height: 24),
+                          const SizedBox(height: 32),
                           _buildControls(),
                         ],
                       ),
@@ -74,32 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildPreview() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        UiAvatar(
-          name: name,
-          size: size,
-          shape: shape,
-          isUpperCase: isUpperCase,
-          useRandomColors: useRandomColors,
-          bgColor: bgColor,
-          textColor: textColor,
-          useNameAsSeed: useNameAsSeed,
-          fontWeight: fontWeight,
-
-          border: useBorder ? Border.all(color: borderColor, width: 2) : null,
-        ),
-        const SizedBox(height: 16),
-        Container(
-          width: 360,
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: const Color(0xFF1E1E1E),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: SelectableText(
-            '''UiAvatar(
+    final code = '''UiAvatar(
   name: '$name',
   size: $size,
   shape: BoxShape.${shape == BoxShape.circle ? "circle" : "rectangle"},
@@ -109,12 +114,70 @@ class _HomeScreenState extends State<HomeScreen> {
   bgColor: ${_colorLiteral(bgColor)},
   textColor: ${_colorLiteral(textColor)},
   border: ${useBorder ? 'Border.all(color: ${_colorLiteral(borderColor)}, width: 2)' : 'null'},
-)''',
-            style: const TextStyle(
-              fontFamily: 'monospace',
-              color: Colors.white,
-              fontSize: 13,
-            ),
+)''';
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Center(
+          child: UiAvatar(
+            name: name,
+            size: size,
+            shape: shape,
+            isUpperCase: isUpperCase,
+            useRandomColors: useRandomColors,
+            bgColor: bgColor,
+            textColor: textColor,
+            useNameAsSeed: useNameAsSeed,
+            fontWeight: fontWeight,
+            border: useBorder ? Border.all(color: borderColor, width: 2) : null,
+          ),
+        ),
+        const SizedBox(height: 24),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.secondaryContainer,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SelectableText(
+                code,
+                style: TextStyle(
+                  fontFamily: 'monospace',
+                  color: Theme.of(context).colorScheme.onSecondaryContainer,
+                  fontSize: 13,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton.icon(
+                  onPressed: () async {
+                    await Clipboard.setData(ClipboardData(text: code));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Code copied to clipboard!'),
+                      ),
+                    );
+                  },
+                  icon: Icon(
+                    Icons.copy,
+                    size: 18,
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                  ),
+                  label: Text(
+                    'Copy Code',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ],
@@ -122,109 +185,115 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildControls() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const Text("Name:"),
-        TextField(
-          decoration: const InputDecoration(labelText: 'Name'),
-          onChanged: (val) => setState(() => name = val),
-          controller: _nameController,
-        ),
-        const SizedBox(height: 16),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text("Name:"),
+          TextField(
+            autocorrect: false,
+            enableSuggestions: false,
+            autofocus: true,
+            onChanged: (val) => setState(() => name = val),
+            controller: _nameController,
+          ),
+          const SizedBox(height: 24),
 
-        const Text("Size:"),
-        Wrap(
-          spacing: 8,
-          children:
-              [16.0, 32.0, 64.0, 128.0, 256.0]
-                  .map(
-                    (s) => ChoiceChip(
-                      label: Text('${s.toInt()}'),
-                      selected: size == s,
-                      onSelected: (_) => setState(() => size = s),
-                    ),
-                  )
-                  .toList(),
-        ),
+          const Text("Size:"),
+          Wrap(
+            spacing: 8,
+            children:
+                [16.0, 32.0, 64.0, 128.0, 256.0]
+                    .map(
+                      (s) => ChoiceChip(
+                        label: Text('${s.toInt()}'),
+                        selected: size == s,
+                        onSelected: (_) => setState(() => size = s),
+                      ),
+                    )
+                    .toList(),
+          ),
 
-        const SizedBox(height: 16),
-        const Text("Shape:"),
-        DropdownButton<BoxShape>(
-          value: shape,
-          items: const [
-            DropdownMenuItem(value: BoxShape.circle, child: Text('Circle')),
-            DropdownMenuItem(
-              value: BoxShape.rectangle,
-              child: Text('Rectangle'),
+          const SizedBox(height: 24),
+          const Text("Shape:"),
+          DropdownButton<BoxShape>(
+            value: shape,
+            items: const [
+              DropdownMenuItem(value: BoxShape.circle, child: Text('Circle')),
+              DropdownMenuItem(
+                value: BoxShape.rectangle,
+                child: Text('Rectangle'),
+              ),
+            ],
+            onChanged: (val) => setState(() => shape = val!),
+          ),
+
+          const SizedBox(height: 24),
+          const Text("Font Weight:"),
+          DropdownButton<FontWeight>(
+            value: fontWeight,
+            items:
+                FontWeight.values
+                    .map(
+                      (weight) => DropdownMenuItem(
+                        value: weight,
+                        child: Text(
+                          weight.toString().replaceAll("FontWeight.", ""),
+                        ),
+                      ),
+                    )
+                    .toList(),
+            onChanged: (val) => setState(() => fontWeight = val!),
+          ),
+
+          const SizedBox(height: 24),
+          SwitchListTile.adaptive(
+            value: isUpperCase,
+            onChanged: (val) => setState(() => isUpperCase = val),
+            title: const Text('Uppercase'),
+          ),
+          SwitchListTile.adaptive(
+            value: useRandomColors,
+            onChanged: (val) => setState(() => useRandomColors = val),
+            title: const Text('Use Random Colors'),
+          ),
+          SwitchListTile.adaptive(
+            value: useNameAsSeed,
+            onChanged: (val) => setState(() => useNameAsSeed = val),
+            title: const Text('Use Name As Seed'),
+          ),
+          SwitchListTile.adaptive(
+            value: useBorder,
+            onChanged: (val) => setState(() => useBorder = val),
+            title: const Text('Show Border'),
+          ),
+
+          if (!useRandomColors) ...[
+            const SizedBox(height: 24),
+            const Text("Background Color:"),
+            _buildColorSwatches(
+              bgColor,
+              (color) => setState(() => bgColor = color),
+            ),
+            const SizedBox(height: 24),
+            const Text("Text Color:"),
+            _buildColorSwatches(
+              textColor,
+              (color) => setState(() => textColor = color),
             ),
           ],
-          onChanged: (val) => setState(() => shape = val!),
-        ),
 
-        const SizedBox(height: 16),
-        const Text("Font Weight:"),
-        DropdownButton<FontWeight>(
-          value: fontWeight,
-          items: FontWeight.values
-              .map(
-                (weight) => DropdownMenuItem(
-                  value: weight,
-                  child: Text(weight.toString()),
-                ),
-              )
-              .toList(),
-          onChanged: (val) => setState(() => fontWeight = val!),
-        ),
-
-
-        SwitchListTile.adaptive(
-          value: isUpperCase,
-          onChanged: (val) => setState(() => isUpperCase = val),
-          title: const Text('Uppercase'),
-        ),
-        SwitchListTile.adaptive(
-          value: useRandomColors,
-          onChanged: (val) => setState(() => useRandomColors = val),
-          title: const Text('Use Random Colors'),
-        ),
-        SwitchListTile.adaptive(
-          value: useNameAsSeed,
-          onChanged: (val) => setState(() => useNameAsSeed = val),
-          title: const Text('Use Name As Seed'),
-        ),
-
-        SwitchListTile.adaptive(
-          value: useBorder,
-          onChanged: (val) => setState(() => useBorder = val),
-          title: const Text('Show Border'),
-        ),
-
-        if (!useRandomColors) ...[
-          const SizedBox(height: 16),
-          const Text("Background Color:"),
-          _buildColorSwatches(
-            bgColor,
-            (color) => setState(() => bgColor = color),
-          ),
-          const SizedBox(height: 16),
-          const Text("Text Color:"),
-          _buildColorSwatches(
-            textColor,
-            (color) => setState(() => textColor = color),
-          ),
+          if (useBorder) ...[
+            const SizedBox(height: 24),
+            const Text("Border Color:"),
+            _buildColorSwatches(
+              borderColor,
+              (color) => setState(() => borderColor = color),
+            ),
+          ],
         ],
-
-        if (useBorder) ...[
-          const SizedBox(height: 16),
-          const Text("Border Color:"),
-          _buildColorSwatches(
-            borderColor,
-            (color) => setState(() => borderColor = color),
-          ),
-        ],
-      ],
+      ),
     );
   }
 
@@ -260,7 +329,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   shape: BoxShape.circle,
                   border: Border.all(
                     color:
-                        selected == color ? Colors.black : Colors.transparent,
+                        selected == color
+                            ? Theme.of(context).colorScheme.onSurface
+                            : Colors.transparent,
                     width: 2,
                   ),
                 ),

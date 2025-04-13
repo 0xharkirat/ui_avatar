@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 /// Name of the the last contributor will be used as default name
 /// as a token of appreciation.
-const _kDefaultName = "Harkirat Singh";
+const kDefaultName = "Harkirat Singh";
 
 /// A simple widget to display a circular avatar with initials.
 /// No need to use any API for this.
@@ -17,7 +17,7 @@ class UiAvatar extends StatelessWidget {
   /// - "A" -> "A"
   const UiAvatar({
     super.key,
-    this.name = _kDefaultName,
+    this.name = kDefaultName,
     this.size = 64.0,
     this.bgColor = Colors.grey,
     this.textColor = Colors.black,
