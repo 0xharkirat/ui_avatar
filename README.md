@@ -3,6 +3,7 @@
 A simple and customizable Flutter widget to generate beautiful text-based avatars using initials — inspired by avatars in email apps, contact lists, and social platforms. No API needed.
 
 **🌐 Try it online:** [ui-avatar-playground.web.app](https://ui-avatar-playground.web.app)
+![Screenshot 2025-04-13 at 10 11 12 pm](https://github.com/user-attachments/assets/0ad2d4ed-e79a-47ba-93d8-94a3b5fe78e2)
 
 ---
 
@@ -50,6 +51,8 @@ import 'package:ui_avatar/ui_avatar.dart';
 
 UiAvatar()
 ```
+![Screenshot 2025-04-13 at 10 05 33 pm](https://github.com/user-attachments/assets/94688079-c24e-4b0c-9307-d642a1efb68c)
+
 
 ### With Customizations
 ```dart
@@ -63,6 +66,7 @@ UiAvatar(
   isUpperCase: false,
 )
 ```
+![Screenshot 2025-04-13 at 10 07 34 pm](https://github.com/user-attachments/assets/0f698f2a-2c1e-4a27-ad65-3ac9f3ceece8)
 
 ### Use Random Colors (Optional Seeded)
 ```dart
@@ -72,6 +76,7 @@ UiAvatar(
   useNameAsSeed: true, // same name = same color
 )
 ```
+![Screenshot 2025-04-13 at 10 08 10 pm](https://github.com/user-attachments/assets/bd960055-a077-4021-b358-9678835e724a)
 
 ### With Border
 ```dart
@@ -81,6 +86,7 @@ UiAvatar(
   border: Border.all(color: Colors.white, width: 2),
 )
 ```
+![Screenshot 2025-04-13 at 10 09 23 pm](https://github.com/user-attachments/assets/a4ecf024-89bd-4f63-8e61-d08f729d92ae)
 
 ---
 
