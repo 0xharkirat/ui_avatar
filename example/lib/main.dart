@@ -13,8 +13,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-   ThemeMode _themeMode = ThemeMode.system;
-
+  ThemeMode _themeMode = ThemeMode.system;
 
   void changeThemeMode(ThemeMode mode) {
     setState(() {
@@ -32,9 +31,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home:  HomeScreen(
-        onChangeThemeMode: changeThemeMode,
-      ),
+      home: HomeScreen(onChangeThemeMode: changeThemeMode),
     );
   }
 }

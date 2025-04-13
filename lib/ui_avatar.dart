@@ -28,7 +28,7 @@ class UiAvatar extends StatelessWidget {
     this.useRandomColors = false,
     this.useNameAsSeed = true,
     this.border,
-   
+
     this.boxShadow,
   }) : assert(size >= 16, "Size must be at least 16");
 
@@ -101,8 +101,6 @@ class UiAvatar extends StatelessWidget {
   /// defaults to null
   final BoxBorder? border;
 
-  
-
   /// A box shadow to use for the avatar
   ///
   /// defaults to null
@@ -125,7 +123,7 @@ class UiAvatar extends StatelessWidget {
         border: border,
         color: finalBgColor,
         shape: shape,
-        
+
         boxShadow: boxShadow,
       ),
       child: Center(
