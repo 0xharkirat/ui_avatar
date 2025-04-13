@@ -1,7 +1,14 @@
 name: ui_avatar
 description: "A simple and customizable Flutter widget to generate beautiful text-based avatars using initials — inspired by avatars in email apps, contact lists, and social platforms. No API needed"
 version: 0.0.1
-homepage:
+homepage: https://github.com/0xharkirat/ui_avatar
+repository: https://github.com/0xharkirat/ui_avatar
+topics:
+  - avatar
+  - initials
+  - flutter
+  - ui
+  - profile
 
 environment:
   sdk: ^3.7.2
